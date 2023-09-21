@@ -1,8 +1,29 @@
-﻿# Made by Joakim Torsvik# 01.09.2023function WriteLog {    Param([string]$LogString)    $TimeStamp = (Get-Date).toString("yyyy/dd/MM HH:mm:ss")    $LogMessage = "[$TimeStamp] : $LogString"    Add-content $LogFile -value $LogMessage}  
-#Check if error folder is empty before proceedingfunction CheckFolderIsEmpty{    If ((Get-ChildItem -Path $Source -Force | Measure-Object).Count -eq 0)  {
+﻿# Made by Joakim Torsvik
+# 01.09.2023
+
+
+function WriteLog {
+
+    Param([string]$LogString)
+
+    $TimeStamp = (Get-Date).toString("yyyy/dd/MM HH:mm:ss")
+    $LogMessage = "[$TimeStamp] : $LogString"
+    Add-content $LogFile -value $LogMessage
+}
+  
+#Check if error folder is empty before proceeding
+function CheckFolderIsEmpty{
+    If ((Get-ChildItem -Path $Source -Force | Measure-Object).Count -eq 0)  {
         WriteLog -Logstring "[ERROR] : Error-folder is empty. Script will be terminated."
-        Write-Host "[INFO] : Error-folder is empty. Script will be terminated."                #Terminate script        Exit    }}function MoveFiles {
-# 20.09 Rewrote this function for a more complex folder-structure at HTU
+        Write-Host "[INFO] : Error-folder is empty. Script will be terminated."
+        
+        #Terminate script
+        Exit
+    }
+}
+
+function MoveFiles {
+# 20.09 Rewrote this function for a more complex folder-structure
 
         CheckFolderIsEmpty
  
@@ -55,11 +76,13 @@ Function Main {
 
 $Source=".\Error"
 $Destination=".\xxx"
-$LogFile = ".\file_move_log.txt"
+$LogFile = ".\file_move_log.txt"
+
 #Check if source and destination folders exist before starting
 if ((Test-Path -Path $Source -PathType Container) -And (Test-Path -Path $Destination -PathType Container)){
     WriteLog -LogString "[INFO] : Starting script: Moving files from error-folder..."
-    WriteLog -LogString "[INFO] : Source folder {$Source} and Destination folder {$Destination} found. Proceeding..."      	MoveFiles
+    WriteLog -LogString "[INFO] : Source folder {$Source} and Destination folder {$Destination} found. Proceeding..."      
+	MoveFiles
     }
 
 else{
